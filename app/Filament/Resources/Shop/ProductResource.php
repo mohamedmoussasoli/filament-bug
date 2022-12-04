@@ -6,6 +6,7 @@ use App\Filament\Resources\Shop\BrandResource\RelationManagers\ProductsRelationM
 use App\Filament\Resources\Shop\ProductResource\Pages;
 use App\Filament\Resources\Shop\ProductResource\RelationManagers;
 use App\Filament\Resources\Shop\ProductResource\Widgets\ProductStats;
+use App\Models\Shop\Category;
 use App\Models\Shop\Product;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
@@ -49,6 +50,24 @@ class ProductResource extends Resource
                                     ->disabled()
                                     ->required()
                                     ->unique(Product::class, 'slug', ignoreRecord: true),
+
+                                Forms\Components\Checkbox::make('enabled')
+                                    ->label('Enable')
+                                    ->reactive(),
+
+                                Forms\Components\Select::make('categories')
+                                    ->disabled(fn($get) => ! $get('enabled'))
+                                    ->label('Categories')
+                                    ->searchable()
+                                    ->options(Category::query()->pluck('name', 'id'))
+                                    ->columnSpan('full'),
+
+
+                                Forms\Components\Select::make('categories2')
+                                    ->disabled(fn($get) => ! $get('enabled'))
+                                    ->label('Categories 2')
+                                    ->options(Category::query()->pluck('name', 'id'))
+                                    ->columnSpan('full'),
 
                                 Forms\Components\MarkdownEditor::make('description')
                                     ->columnSpan('full'),
@@ -140,6 +159,7 @@ class ProductResource extends Resource
                             ]),
 
                         Forms\Components\Section::make('Associations')
+                            ->collapsible()
                             ->schema([
                                 Forms\Components\Select::make('shop_brand_id')
                                     ->relationship('brand', 'name')
