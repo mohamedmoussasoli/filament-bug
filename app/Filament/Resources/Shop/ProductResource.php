@@ -56,15 +56,14 @@ class ProductResource extends Resource
                                     ->reactive(),
 
                                 Forms\Components\Select::make('categories')
-                                    ->disabled(fn($get) => ! $get('enabled'))
+                                    ->disabled(fn ($get) => ! $get('enabled'))
                                     ->label('Categories')
                                     ->searchable()
                                     ->options(Category::query()->pluck('name', 'id'))
                                     ->columnSpan('full'),
 
-
                                 Forms\Components\Select::make('categories2')
-                                    ->disabled(fn($get) => ! $get('enabled'))
+                                    ->disabled(fn ($get) => ! $get('enabled'))
                                     ->label('Categories 2')
                                     ->options(Category::query()->pluck('name', 'id'))
                                     ->columnSpan('full'),
